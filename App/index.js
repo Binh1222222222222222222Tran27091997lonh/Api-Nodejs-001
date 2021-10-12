@@ -1,9 +1,12 @@
+
+
+
 const express = require('express');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 4050;
+const port = 5050;
 
 // Setup connection mongoDB instance
 const mongodbClient = require('./utils/mongooseDB');
@@ -19,15 +22,16 @@ app.use('/users', userRoute);
 
 // catch 404 error 
 app.use((req, res, next) => {
-    const Error = new Error('Not Found')
+    const err = new Error('Not Found')
     err.status = 404
     next(err)
 });
 
 // Error handler function
-app.use(()=>{
+app.use((err, req, res, next)=>{
     const error = app.get('env') === "development" ? err : {}
-    const status = err.status || 500 // loi ngoai y muon 
+    // loi ngoai y muon
+    const status = err.status || 500  
     // response to client error
     return res.status(status).json({
         error: {
