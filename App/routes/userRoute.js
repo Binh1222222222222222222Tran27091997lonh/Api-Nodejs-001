@@ -4,26 +4,32 @@ const router = require('express-promise-router')();
 const userControllers = require('../controllers/Users');
 
 
+// Validator cho parameters 
+const { validateBody, validateParam, schemas } = require('../helpers/Validator');
+
+
 // User
 router.route('/')
     .get(userControllers.getUser)
-    .post(userControllers.postUser)
+    .post(validateBody(schemas.userSchema), userControllers.postUser)
 
 // User ID
 router.route('/:userID')
-    .get(userControllers.getUserId)
-    .put(userControllers.putUserId) // replace
+    .get(validateParam(schemas.idSchema, 'userID') ,userControllers.getUserId)
+    .put(
+        validateParam(schemas.idSchema, 'userID'), 
+        validateBody(schemas.userSchema), userControllers.putUserId) // replace
 
 // User ID Decks
 router.route('/:userID/decks')
-    .get(userControllers.getUserDeck)
-    .post(userControllers.postUserDeck)
+    .get(
+        validateParam(schemas.idSchema, 'userID'), 
+        userControllers.getUserDeck)
+    .post(
+        validateParam(schemas.idSchema, 'userID'), 
+        validateBody(schemas.deckSchema), 
+        userControllers.postUserDeck)
 
-
-// Product
-router.route('/products')
-    .get(userControllers.getProductId)
-    
 
 
 // Product ID

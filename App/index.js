@@ -13,12 +13,19 @@ const mongodbClient = require('./utils/mongooseDB');
 
 // Middlewares
 app.use(logger('dev'));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
+
+// Routes
 const userRoute = require('./routes/userRoute');
+const deckRoute = require('./routes/deckRoute');
+const productsRoute = require('./routes/productRoute');
+
+
 // Routes
 app.use('/users', userRoute);
-
+app.use('/decks', deckRoute);
+app.use('/products', productsRoute);
 
 // catch 404 error 
 app.use((req, res, next) => {
