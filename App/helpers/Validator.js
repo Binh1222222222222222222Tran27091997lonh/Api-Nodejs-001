@@ -44,6 +44,20 @@ const validateParam = (schema, name)=>{
 
 // Id mongodb
 const schemas = {
+    // Auther Schema Sign In
+    authSignInSchema: Joi.object().keys({
+        email: Joi.string().email().required(),
+        password: Joi.string().min(9).required(),
+    }), 
+
+    // Auther Schema Sign Up
+    authSignUpSchema: Joi.object().keys({
+        firstName: Joi.string().min(2).required(),
+        lastName: Joi.string().min(2).required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().min(9).required(),
+    }), 
+
     // Decks User
     deckSchema: Joi.object().keys({
         name: Joi.string().min(6).required(),

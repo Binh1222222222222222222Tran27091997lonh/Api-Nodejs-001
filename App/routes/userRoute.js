@@ -2,11 +2,29 @@
 const express = require('express');
 const router = require('express-promise-router')();
 const userControllers = require('../controllers/Users');
+const passport = require('passport');
 
+
+// Passport
+const passportConfig = require('../middlewares/passport');
 
 // Validator cho parameters 
 const { validateBody, validateParam, schemas } = require('../helpers/Validator');
 
+
+// Sign up
+router.route('/signup')
+    .post(validateBody(schemas.authSignUpSchema), userControllers.signUp)
+
+
+// Sign in 
+router.route('/signin')
+    .post(validateBody(schemas.authSignInSchema), userControllers.signIn)
+
+
+// Secret test passport
+router.route('/secret')
+    .get(passport.authenticate('jwt', { session: false }) ,userControllers.secret)
 
 // User
 router.route('/')

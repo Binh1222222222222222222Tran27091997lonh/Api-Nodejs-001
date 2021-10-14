@@ -3,7 +3,49 @@
 const User = require('../models/userModels');
 const Product = require('../models/productModels');
 const Deck = require('../models/userDeck');
+// jsonwebtoken
+const JWT = require('jsonwebtoken');
+const { JWT_SECRET } = require('../configs/index');
 
+// encodeToken
+const encodeToken = (userID)=>{
+    return JWT.sign({
+        iss: "Kim Xuyen",
+        sub: userID,
+        iat: new Date().getTime(),
+        exp: new Date().setDate(new Date().getDate() + 7)
+    }, JWT_SECRET)
+};
+
+// [POST] signUp
+const signUp = async (req, res, next) => {
+    const {firstName, lastName, email, password} = req.value.body
+
+    const foundUser = await User.findOne({ email })
+    const passwordFound = await User.findOne({ password })
+    if (foundUser) return res.status(403).json({error: {message: "Email already exists :(" }})
+    if (passwordFound) return res.status(403).json({error: {message: "Password already exists :("}})
+    // Create a new user 
+    const newUser = new User({email, password, firstName, lastName})
+    newUser.save()
+    const token = encodeToken(newUser._id)
+    res.setHeader('Authorization', token)
+        return res.status(200).json({success: true})
+
+};
+
+
+//[POST] signIn
+const signIn = async (req, res, next) => {
+    console.log('signIn')
+};
+
+
+// [GET] secret
+const secret = async (req, res, next) =>{
+    console.log('true')
+    return res.status(200).json({response: true})
+};
 
 // [GET] User
 const getUser = async (req, res, next)=>{
@@ -90,7 +132,8 @@ const patchProductId = async (req, res, next)=>{
 module.exports = {
     getUser, postUser, getUserId, putUserId, 
     getProductId, patchProductId, 
-    getUserDeck, postUserDeck
+    getUserDeck, postUserDeck, 
+    signIn, signUp, secret,
     
     
 
