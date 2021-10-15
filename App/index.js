@@ -7,7 +7,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 5050;
+const port = 7090;
 
 // Setup connection mongoDB instance
 const mongodbClient = require('./utils/mongooseDB');
@@ -15,7 +15,7 @@ const mongodbClient = require('./utils/mongooseDB');
 // Middlewares
 app.use(logger('dev'));
 app.use(bodyParser.json());
-
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 const userRoute = require('./routes/userRoute');

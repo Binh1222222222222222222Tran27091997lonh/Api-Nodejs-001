@@ -19,7 +19,10 @@ router.route('/signup')
 
 // Sign in 
 router.route('/signin')
-    .post(validateBody(schemas.authSignInSchema), userControllers.signIn)
+    .post(
+        validateBody(schemas.authSignInSchema), 
+        passport.authenticate('local', { session : false}),
+        userControllers.signIn)
 
 
 // Secret test passport
